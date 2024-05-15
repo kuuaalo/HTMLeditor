@@ -3,12 +3,13 @@ from tkinter import ttk
 from tkinter import Tk, Text
 from bs4 import BeautifulSoup
 from html.parser import HTMLParser
+from tkinter import filedialog as fd
 
 root = tk.Tk()
 root.title('PortfolioEditor')
 
-window_width = 300
-window_height = 200
+window_width = 600
+window_height = 300
 # get the screen dimension
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
@@ -22,10 +23,13 @@ root.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
 
 # place a label on the root window
 message = ttk.Label(root, text="Make a new Portfolio entry.")
-message.pack()
+message.grid(row=0, column=0, columnspan=3, padx=5, pady=5)
 
 text = Text(root, height=8)
-text.pack()
+text.grid(row=1, column=0, columnspan=3, padx=5, pady=5)
+
+
+
 
 #preview text placement.line 1 character 0
 text.insert('1.0', 'Write your entry here')
@@ -51,7 +55,9 @@ def callback():
     with open(file_path, 'w') as file:
         file.write(soup.prettify(formatter=lambda s: s.replace("/>", ">")))
 
-
+def select_file():
+    filename = fd.askopenfilename()
+    
 #button function
 write_button = ttk.Button(
    root, 
@@ -59,15 +65,25 @@ write_button = ttk.Button(
    command=callback
 )
 #button appearance
-write_button.pack(
-    ipadx=5,
-    ipady=5,
-    expand=True
+
+open_button = ttk.Button(
+    root,
+    text="Open html file",
+    command=select_file
 )
+exit_button = ttk.Button(
+    root,
+    text="Exit",
+    command=lambda: root.quit()
+)
+open_button.grid(row=3, column=0, padx=5, pady=5)
+write_button.grid(row=3, column=2, padx=5, pady=5)
+exit_button.grid(row=4, column=1, padx=5, pady=5)
 
 
 # keep the window displaying
 root.mainloop()
+
 
 
 #next time look into a html editing python library like beautiful soup
